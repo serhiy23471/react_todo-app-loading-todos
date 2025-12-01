@@ -1,50 +1,31 @@
 import React, { useState } from 'react';
+import { Todo } from '../types/Todo';
 
 type Props = {
-  onAdd: (title: string) => void;
-  disabled?: boolean;
+    setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+    onTypingChange?: (isTyping: boolean) => void;
 };
 
-export const NewTodo: React.FC<Props> = ({ onAdd, disabled = false }) => {
-  const [title, setTitle] = useState('');
+export const NewTodo: React.FC<Props> = ({ onTypingChange }) => {
+    const [title, setTitle] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
 
-    const trimmedTitle = title.trim();
+        setTitle(value);
+        onTypingChange?.(value.trim().length > 0);
+    };
 
-    if (!trimmedTitle) {
-      return;
-    }
-
-    onAdd(trimmedTitle);
-    setTitle('');
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  return (
-    <header className="todoapp__header">
-      <button
-        type="button"
-        className="todoapp__toggle-all active"
-        data-cy="ToggleAllButton"
-      />
-
-      <form onSubmit={handleSubmit}>
-        <input
-          data-cy="NewTodoField"
-          type="text"
-          className="todoapp__new-todo"
-          placeholder="What needs to be done?"
-          value={title}
-          onChange={handleChange}
-          disabled={disabled}
-          autoFocus
-        />
-      </form>
-    </header>
-  );
+    return (
+        <form>
+            <input
+                data-cy="NewTodoField"
+                type="text"
+                className="todoapp__new-todo"
+                placeholder="What needs to be done?"
+                value={title}
+                onChange={handleChange}
+            />
+        </form>
+    );
 };
