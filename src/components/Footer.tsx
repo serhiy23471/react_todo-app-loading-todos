@@ -1,33 +1,46 @@
 import React from 'react';
-import { Filter } from './Filter';
 import { FilterStatus } from '../types/FilterStatus';
 
 type Props = {
-  activeTodosCount: number;
   currentFilter: FilterStatus;
   onFilterChange: (filter: FilterStatus) => void;
 };
 
-export const Footer: React.FC<Props> = ({
-  activeTodosCount,
+export const Filter: React.FC<Props> = ({
   currentFilter,
   onFilterChange,
 }) => {
   return (
-    <footer className="todoapp__footer" data-cy="Footer">
-      <span className="todo-count" data-cy="TodosCounter">
-        {activeTodosCount} {activeTodosCount === 1 ? 'item' : 'items'} left
-      </span>
+    <ul className="filters" data-cy="Filter">
+      <li>
+        <a
+          href="#/"
+          className={currentFilter === FilterStatus.All ? 'selected' : ''}
+          onClick={() => onFilterChange(FilterStatus.All)}
+        >
+          All
+        </a>
+      </li>
 
-      <Filter currentFilter={currentFilter} onFilterChange={onFilterChange} />
+      <li>
+        <a
+          href="#/active"
+          className={currentFilter === FilterStatus.Active ? 'selected' : ''}
+          onClick={() => onFilterChange(FilterStatus.Active)}
+        >
+          Active
+        </a>
+      </li>
 
-      <button
-        type="button"
-        className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
-      >
-        Clear completed
-      </button>
-    </footer>
+      <li>
+        <a
+          href="#/completed"
+          className={currentFilter === FilterStatus.Completed ? 'selected' : ''}
+          onClick={() => onFilterChange(FilterStatus.Completed)}
+        >
+          Completed
+        </a>
+      </li>
+    </ul>
   );
 };
